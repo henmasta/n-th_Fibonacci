@@ -9,5 +9,12 @@
 		And for n = 6 will answer it's 8, using the same formula
 	</h4>
 	<hr/>
-	You can integrate this code in you project and use how library for calculate n-th number Fibonacci row
+	You can integrate this code in you project and use how library for calculate n-th number Fibonacci row or start UI.
+	<h1>Start program</h1>
+	<h2>Compile</h2>
+	<code>cd &lt;path_to_directory&gt;</code><br/>
+	<code>javac -cp. Main.java</code>
+ 	<h2>Start</h2>
+  	<code>java Main</code><br/>
+
 </div>
