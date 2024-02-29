@@ -1,10 +1,6 @@
 import javax.swing.*;
 
-
 import java.awt.*;
-
-import java.io.FileWriter;
-import java.io.IOException;
 import java.math.BigInteger;
 
 public class MainFrame {
@@ -29,7 +25,7 @@ public class MainFrame {
         panel = new JPanel();
         panel.setLayout(null);
 
-       
+
         labelEnterN = new JLabel("ENTER N");
         labelEnterN.setFont(new Font("Arial", Font.BOLD, 70));
         labelEnterN.setBounds(frame.getWidth()/2 - 150, 30, 500, 200);
@@ -37,7 +33,7 @@ public class MainFrame {
         enterField = new JTextField();
         enterField.setFont(new Font("Arial", Font.PLAIN, 20));
         enterField.setBounds(frame.getWidth()/2 - 130, 220, 265, 35);
-        
+
 
         ok = new JButton("OK");
         ok.setFont(new Font("Arial", Font.BOLD, 30));
@@ -48,14 +44,19 @@ public class MainFrame {
         result.setLineWrap(true);
         result.setWrapStyleWord(true);
 
-        result.setBounds(200, frame.getHeight()-270, frame.getWidth()-400, 130);
-
+        JScrollPane scrollResult = new JScrollPane(
+                result,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED
+        );
+        scrollResult.setBounds(200, frame.getHeight()-270, frame.getWidth()-400, 130);
         frame.setVisible(true);
 
         panel.add(labelEnterN);
         panel.add(enterField);
         panel.add(ok);
-        panel.add(result);
+        panel.add(scrollResult);
+
 
         frame.add(panel);
 
