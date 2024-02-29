@@ -1,7 +1,7 @@
 import java.math.BigInteger;
 
 public class Fibonacci {
-    public static BigInteger nthNumFibonacci(int n) {
+    public static BigInteger nthNumFibonacci(long n) {
 
         BigInteger fibonacci;
         BigInteger num1 = new BigInteger("0");
