@@ -1,6 +1,4 @@
 import javax.swing.*;
-
-
 import java.awt.*;
 
 import java.math.BigInteger;
@@ -10,11 +8,11 @@ public class MainFrame {
     private static JLabel labelEnterN;
     private static JTextField enterField;
     private static JPanel panel;
-
+    
     private static JButton ok;
     private static JTextArea result;
 
-
+    
     public MainFrame() {
 
 
@@ -40,32 +38,39 @@ public class MainFrame {
         ok = new JButton("OK");
         ok.setFont(new Font("Arial", Font.BOLD, 30));
         ok.setBounds(frame.getWidth()/2 - 50, 280, 100, 30);
-        
+        frame.getRootPane().setDefaultButton(ok);
 
         result = new JTextArea();
         result.setLineWrap(true);
         result.setWrapStyleWord(true);
 
-        result.setBounds(200, frame.getHeight()-270, frame.getWidth()-400, 130);
-        
-
-
+        JScrollPane scrollResult = new JScrollPane(
+                result,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED
+        );
+        scrollResult.setBounds(200, frame.getHeight()-270, frame.getWidth()-400, 130);
         frame.setVisible(true);
 
         panel.add(labelEnterN);
         panel.add(enterField);
         panel.add(ok);
-        panel.add(result);
+        panel.add(scrollResult);
 
-
+        
         frame.add(panel);
 
         ok.addActionListener(e -> {
             if (enterField.getText().equals("")) return;
-            BigInteger num = Fibonacci.nthNumFibonacci(
-                    Integer.parseInt(enterField.getText())
-            );
-            result.setText(num.toString());
+
+            new Thread(() -> {
+
+                BigInteger num = Fibonacci.nthNumFibonacci(Long.parseLong(enterField.getText()));
+                
+
+                result.append(num.toString());
+
+            }).start();
 
         });
 
