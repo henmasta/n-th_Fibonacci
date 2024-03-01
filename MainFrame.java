@@ -1,6 +1,6 @@
 import javax.swing.*;
-import java.awt.*;
 
+import java.awt.*;
 import java.math.BigInteger;
 
 public class MainFrame {
@@ -8,11 +8,12 @@ public class MainFrame {
     private static JLabel labelEnterN;
     private static JTextField enterField;
     private static JPanel panel;
-    
+
     private static JButton ok;
     private static JTextArea result;
 
-    
+    private static JTextArea firstNth;
+
     public MainFrame() {
 
 
@@ -25,7 +26,7 @@ public class MainFrame {
         panel = new JPanel();
         panel.setLayout(null);
 
-       
+
         labelEnterN = new JLabel("ENTER N");
         labelEnterN.setFont(new Font("Arial", Font.BOLD, 70));
         labelEnterN.setBounds(frame.getWidth()/2 - 150, 30, 500, 200);
@@ -33,7 +34,27 @@ public class MainFrame {
         enterField = new JTextField();
         enterField.setFont(new Font("Arial", Font.PLAIN, 20));
         enterField.setBounds(frame.getWidth()/2 - 130, 220, 265, 35);
-        
+
+        firstNth = new JTextArea();
+
+        firstNth.setVisible(true);
+        firstNth.setEditable(false);
+        firstNth.setText("""
+                1. n = 1
+                2. n = 1
+                3. n = 2
+                4. n = 3
+                5. n = 5
+                6. n = 8
+                7. n = 13
+                8. n = 21
+                9. n = 34
+                10. n = 55
+                11. n = 89
+                12. n = 144
+                """);
+        firstNth.setBounds(20, 70, 150, 200);
+        panel.add(firstNth);
 
         ok = new JButton("OK");
         ok.setFont(new Font("Arial", Font.BOLD, 30));
@@ -57,21 +78,34 @@ public class MainFrame {
         panel.add(ok);
         panel.add(scrollResult);
 
-        
+
         frame.add(panel);
 
         ok.addActionListener(e -> {
+
             if (enterField.getText().equals("")) return;
 
-            new Thread(() -> {
+            Load load = new Load();
 
-                BigInteger num = Fibonacci.nthNumFibonacci(Long.parseLong(enterField.getText()));
-                
+            new Thread(() -> load.setVisible(true)).start();
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
 
-                result.append(num.toString());
+            double startTime = System.currentTimeMillis();
+            BigInteger num = Fibonacci.nthNumFibonacci(
+                    Long.parseLong(enterField.getText())
+            );
+            double endTime = System.currentTimeMillis();
 
-            }).start();
+            result.setText( ( (endTime - startTime)/1000 ) + " seconds\n");
+            result.append(num.toString());
 
+            load.setVisible(false);
+
+            result.setText(num.toString());
         });
 
         frame.setVisible(true);
