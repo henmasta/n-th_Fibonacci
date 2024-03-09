@@ -8,11 +8,12 @@ public class MainFrame {
     private static JLabel labelEnterN;
     private static JTextField enterField;
     private static JPanel panel;
-
+    private static JPanel menuPanel;
     private static JButton ok;
     private static JTextArea result;
     private static JTextArea firstNth;
     private static JTextArea history;
+    private static JButton hamburgerButton;
 
 
 
@@ -28,6 +29,15 @@ public class MainFrame {
         panel = new JPanel();
         panel.setLayout(null);
 
+        menuPanel = new JPanel();
+        menuPanel.setLayout(null);
+        menuPanel.setBounds(0, 0, 200, frame.getHeight());
+
+        ImageIcon icon = new ImageIcon("1.png");
+        Image img = icon.getImage() ;
+        Image newImg = img.getScaledInstance(40, 30, java.awt.Image.SCALE_SMOOTH) ;
+        icon = new ImageIcon(newImg);
+
 
         labelEnterN = new JLabel("ENTER N");
         labelEnterN.setFont(new Font("Arial", Font.BOLD, 70));
@@ -37,11 +47,17 @@ public class MainFrame {
         enterField.setFont(new Font("Arial", Font.PLAIN, 20));
         enterField.setBounds(frame.getWidth()/2 - 130, 220, 265, 35);
 
+        // Создаем кнопку в стиле гамбургера
+        hamburgerButton = new JButton(icon);
+        hamburgerButton.setFont(new Font("Arial", Font.PLAIN, 20));
+        hamburgerButton.setBounds(20, 20, 40, 30);
+        hamburgerButton.setVisible(true);
+        menuPanel.add(hamburgerButton);
 
         firstNth = new JTextArea();
         history = new JTextArea();
 
-        firstNth.setVisible(true);
+        firstNth.setVisible(false);
         firstNth.setEditable(false);
         firstNth.setText("""
                 1. n = 1
@@ -58,7 +74,7 @@ public class MainFrame {
                 12. n = 144
                 """);
 
-        history.setVisible(true);
+        history.setVisible(false);
         history.setEditable(false);
         history.setLineWrap(true);
         history.setWrapStyleWord(true);
@@ -71,11 +87,14 @@ public class MainFrame {
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED
         );
         scroll.setBounds(20, 290, 150, 200); // Задаем расположение
-        scroll.setVisible(true);
+        scroll.setVisible(false);
 
         firstNth.setBounds(20, 70, 150, 200);
-        panel.add(firstNth);
-        panel.add(scroll);
+        
+        hamburgerButton.addActionListener(e -> toggleMenu(firstNth, history, scroll));
+
+        menuPanel.add(firstNth);
+        menuPanel.add(scroll);
 
 
         ok = new JButton("OK");
@@ -100,7 +119,7 @@ public class MainFrame {
         panel.add(ok);
         panel.add(scrollResult);
 
-
+        frame.add(menuPanel);
         frame.add(panel);
 
         ok.addActionListener(e -> {
@@ -133,5 +152,11 @@ public class MainFrame {
         });
 
         frame.setVisible(true);
+    }
+
+    private void toggleMenu(Component... components) {
+        for (Component component : components) {
+            component.setVisible(!component.isVisible());
+        }
     }
 }
