@@ -135,20 +135,22 @@ public class MainFrame {
                 throw new RuntimeException(ex);
             }
 
-            double startTime = System.currentTimeMillis();
-            BigInteger num = Fibonacci.nthNumFibonacci(
-                    Long.parseLong(enterField.getText())
-            );
-            double endTime = System.currentTimeMillis();
+            new Thread(() -> {
+                double startTime = System.currentTimeMillis();
+                BigInteger num = Fibonacci.nthNumFibonacci(
+                        Long.parseLong(enterField.getText())
+                );
+                double endTime = System.currentTimeMillis();
 
-            result.setText( ( (endTime - startTime)/1000 ) + " seconds\n");
-            result.append(num.toString());
-            String resultHistory = enterField.getText() + " = " + num + "\n\n";
-            history.append(resultHistory);
+                result.setText( ( (endTime - startTime)/1000 ) + " seconds\n");
+                result.append(num.toString());
+                String resultHistory = enterField.getText() + " = " + num + "\n\n";
+                history.append(resultHistory);
 
-            load.setVisible(false);
+                load.setVisible(false);
 
-            result.setText(num.toString());
+                result.setText(num.toString());
+            }).start();
         });
 
         frame.setVisible(true);
