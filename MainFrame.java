@@ -12,6 +12,8 @@ public class MainFrame {
     private static JButton ok;
     private static JTextArea result;
     private static JTextArea firstNth;
+    private static JTextArea history;
+
 
 
     public MainFrame() {
@@ -37,6 +39,7 @@ public class MainFrame {
 
 
         firstNth = new JTextArea();
+        history = new JTextArea();
 
         firstNth.setVisible(true);
         firstNth.setEditable(false);
@@ -54,8 +57,25 @@ public class MainFrame {
                 11. n = 89
                 12. n = 144
                 """);
+
+        history.setVisible(true);
+        history.setEditable(false);
+        history.setLineWrap(true);
+        history.setWrapStyleWord(true);
+
+        
+
+        JScrollPane scroll = new JScrollPane(
+                history,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED
+        );
+        scroll.setBounds(20, 290, 150, 200); // Задаем расположение
+        scroll.setVisible(true);
+
         firstNth.setBounds(20, 70, 150, 200);
         panel.add(firstNth);
+        panel.add(scroll);
 
 
         ok = new JButton("OK");
@@ -104,6 +124,8 @@ public class MainFrame {
 
             result.setText( ( (endTime - startTime)/1000 ) + " seconds\n");
             result.append(num.toString());
+            String resultHistory = enterField.getText() + " = " + num + "\n\n";
+            history.append(resultHistory);
 
             load.setVisible(false);
 
