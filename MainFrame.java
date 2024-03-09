@@ -89,5 +89,4 @@ public class MainFrame {
 
         frame.setVisible(true);
     }
-
 }
