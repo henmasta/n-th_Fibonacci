@@ -1,7 +1,12 @@
 import javax.swing.*;
-
 import java.awt.*;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Scanner;
 
 public class MainFrame {
 
@@ -14,7 +19,7 @@ public class MainFrame {
     private static JTextArea firstNth;
     private static JTextArea history;
     private static JButton hamburgerButton;
-
+    private static final File file = new File("history.txt");
 
 
     public MainFrame() {
@@ -37,15 +42,6 @@ public class MainFrame {
         Image img = icon.getImage() ;
         Image newImg = img.getScaledInstance(40, 30, java.awt.Image.SCALE_SMOOTH) ;
         icon = new ImageIcon(newImg);
-
-
-        labelEnterN = new JLabel("ENTER N");
-        labelEnterN.setFont(new Font("Arial", Font.BOLD, 70));
-        labelEnterN.setBounds(frame.getWidth()/2 - 150, 30, 500, 200);
-
-        enterField = new JTextField();
-        enterField.setFont(new Font("Arial", Font.PLAIN, 20));
-        enterField.setBounds(frame.getWidth()/2 - 130, 220, 265, 35);
 
         // Создаем кнопку в стиле гамбургера
         hamburgerButton = new JButton(icon);
@@ -79,7 +75,19 @@ public class MainFrame {
         history.setLineWrap(true);
         history.setWrapStyleWord(true);
 
-        
+        if(file.exists()) {
+            try {
+                Scanner read = new Scanner(file);
+                while (read.hasNextLine()) {
+                    String data = read.nextLine();
+                    history.append(data);
+                    history.append("\n");
+                }
+                read.close();
+            } catch (FileNotFoundException e) {
+                //TODO
+            }
+        }
 
         JScrollPane scroll = new JScrollPane(
                 history,
@@ -90,12 +98,19 @@ public class MainFrame {
         scroll.setVisible(false);
 
         firstNth.setBounds(20, 70, 150, 200);
-        
         hamburgerButton.addActionListener(e -> toggleMenu(firstNth, history, scroll));
 
         menuPanel.add(firstNth);
         menuPanel.add(scroll);
 
+        labelEnterN = new JLabel("ENTER N");
+        labelEnterN.setFont(new Font("Arial", Font.BOLD, 70));
+        labelEnterN.setBounds(frame.getWidth()/2 - 150, 30, 500, 200);
+
+        enterField = new JTextField();
+        enterField.setFont(new Font("Arial", Font.PLAIN, 20));
+        enterField.setBounds(frame.getWidth()/2 - 130, 220, 265, 35);
+        enterField.setDocument(new NumOnlyDocument());
 
         ok = new JButton("OK");
         ok.setFont(new Font("Arial", Font.BOLD, 30));
@@ -114,6 +129,7 @@ public class MainFrame {
         scrollResult.setBounds(200, frame.getHeight()-270, frame.getWidth()-400, 130);
         frame.setVisible(true);
 
+        panel.add(hamburgerButton);
         panel.add(labelEnterN);
         panel.add(enterField);
         panel.add(ok);
@@ -123,7 +139,6 @@ public class MainFrame {
         frame.add(panel);
 
         ok.addActionListener(e -> {
-
             if (enterField.getText().equals("")) return;
 
             Load load = new Load();
@@ -136,21 +151,26 @@ public class MainFrame {
             }
 
             new Thread(() -> {
+
                 double startTime = System.currentTimeMillis();
-                BigInteger num = Fibonacci.nthNumFibonacci(
-                        Long.parseLong(enterField.getText())
-                );
+                BigInteger num = Fibonacci.nthNumFibonacci(Long.parseLong(enterField.getText()));
                 double endTime = System.currentTimeMillis();
 
                 result.setText( ( (endTime - startTime)/1000 ) + " seconds\n");
                 result.append(num.toString());
                 String resultHistory = enterField.getText() + " = " + num + "\n\n";
                 history.append(resultHistory);
+                try {
+                    FileWriter writer = new FileWriter(file, true);
+                    writer.write(resultHistory);
+                    writer.close();
+                } catch (IOException ex) {
+                    System.out.println(ex.getMessage());
+                }
 
                 load.setVisible(false);
-
-                result.setText(num.toString());
             }).start();
+
         });
 
         frame.setVisible(true);
