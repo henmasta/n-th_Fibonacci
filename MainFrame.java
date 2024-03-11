@@ -72,6 +72,7 @@ public class MainFrame {
             } catch (InterruptedException ex) {
                 throw new RuntimeException(ex);
             }
+            System.out.println();
 
             double startTime = System.currentTimeMillis();
             BigInteger num = Fibonacci.nthNumFibonacci(
